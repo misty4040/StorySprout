@@ -77,8 +77,8 @@ const ContactUs = () => {
                 How can we help?
               </label>
               <select
-                id="topic"
-                name="topic"
+                id="title"
+                name="title"
                 required
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
               >
