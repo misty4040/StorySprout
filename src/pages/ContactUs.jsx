@@ -86,11 +86,11 @@ const ContactUs = () => {
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="">-- Select an option --</option>
-                <option value="bug">🐞 Report a Bug</option>
-                <option value="feature">✨ Suggest a Feature</option>
-                <option value="feedback">📝 General Feedback</option>
-                <option value="help">❓ Need Help</option>
-                <option value="other">📦 Something Else</option>
+                <option value="Report a bug">🐞 Report a Bug</option>
+                <option value="Suggest a feature">✨ Suggest a Feature</option>
+                <option value="General feedback">📝 General Feedback</option>
+                <option value="Need help">❓ Need Help</option>
+                <option value="Something Else">📦 Something Else</option>
               </select>
             </div>
             <div>
