@@ -137,7 +137,7 @@ const About = () => {
           </p>
           <a
             href="/create-story"
-            className="inline-block bg-white text-primary font-semibold px-6 py-3 rounded hover:shadow-md transition  hover:shadow-lg transition hover:-translate-y-0.5 active:scale-95"
+            className="inline-block bg-white text-primary font-semibold px-6 py-3 rounded  hover:shadow-lg transition hover:-translate-y-0.5 active:scale-95"
           >
             Start Creating Stories
           </a>
