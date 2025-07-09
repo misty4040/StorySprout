@@ -3,6 +3,9 @@ import emailjs from "emailjs-com";
 import contactImage from "../assets/contact.png";
 
 const ContactUs = () => {
+  const formRef = useRef();
+
+const ContactUs = () => {
   useEffect(() => {
     emailjs.init("v1JEDKkABCH7KSB_-"); // Your public key
   }, []);
@@ -10,7 +13,7 @@ const ContactUs = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     emailjs
-      .sendForm("service_yd2pmnq", "template_te1vrn6", e.target)
+      .sendForm("service_yd2pmnq", "template_te1vrn6", formRef.current)
       .then(() => {
         alert("🎉 Message sent successfully!");
       })
