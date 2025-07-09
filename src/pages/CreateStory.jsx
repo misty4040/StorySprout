@@ -116,7 +116,6 @@ export default function CreateStory() {
                       <h3 className="font-semibold text-lg text-gray-800">
                         {label}
                       </h3>
-                      <span className="grow"></span>
                       <p className="text-sm text-gray-500">{desc}</p>
                     </div>
                   </label>
