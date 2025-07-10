@@ -1,11 +1,16 @@
-// src/components/Header.jsx
-
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/Logo.png";
 
-export default function Header() {
+export default function Header({ user, setUser }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
 
   const navLinks = [
     { to: "/", label: "Home" },
@@ -44,20 +49,36 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Desktop Auth Buttons */}
-        <div className="hidden lgm:flex gap-space-3">
-          <Link
-            to="/login"
-            className="inline-flex items-center justify-center px-space-4 py-space-2 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition shadow hover:shadow-md hover:-translate-y-0.5"
-          >
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="inline-flex items-center justify-center px-space-4 py-space-2 text-sm font-medium text-white bg-gradient-to-r from-primary to-purple-700 rounded-lg shadow hover:shadow-md hover:-translate-y-0.5 transition"
-          >
-            Sign Up
-          </Link>
+        {/* Desktop Auth Area */}
+        <div className="hidden lgm:flex gap-space-3 items-center">
+          {!user ? (
+            <>
+              <Link
+                to="/login"
+                className="inline-flex items-center justify-center px-space-4 py-space-2 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary hover:text-white transition shadow hover:shadow-md hover:-translate-y-0.5"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="inline-flex items-center justify-center px-space-4 py-space-2 text-sm font-medium text-white bg-gradient-to-r from-primary to-purple-700 rounded-lg shadow hover:shadow-md hover:-translate-y-0.5 transition"
+              >
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            <>
+              <span className="text-sm font-medium text-gray-600">
+                Welcome, {user.displayName?.split(" ")[0]}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="text-sm font-medium text-primary border border-primary px-3 py-1 rounded hover:bg-primary hover:text-white transition"
+              >
+                Logout
+              </button>
+            </>
+          )}
         </div>
 
         {/* Hamburger */}
@@ -69,7 +90,7 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile Drawer with Blur */}
+      {/* Mobile Drawer */}
       <div
         className={`fixed top-0 right-0 h-full w-64 bg-white/70 backdrop-blur-md z-[60] transform ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
@@ -102,21 +123,40 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="flex flex-col gap-2 px-4">
-          <Link
-            to="/login"
-            onClick={() => setIsMenuOpen(false)}
-            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary border border-primary rounded hover:bg-primary hover:text-white transition active:scale-95"
-          >
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            onClick={() => setIsMenuOpen(false)}
-            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-primary rounded hover:bg-purple-700 transition active:scale-95"
-          >
-            Sign Up
-          </Link>
+        <div className="flex flex-col gap-2 px-4 pb-6">
+          {!user ? (
+            <>
+              <Link
+                to="/login"
+                onClick={() => setIsMenuOpen(false)}
+                className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary border border-primary rounded hover:bg-primary hover:text-white transition active:scale-95"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                onClick={() => setIsMenuOpen(false)}
+                className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-primary rounded hover:bg-purple-700 transition active:scale-95"
+              >
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            <>
+              <span className="text-sm text-gray-600 px-2">
+                Welcome, {user.displayName?.split(" ")[0]}
+              </span>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsMenuOpen(false);
+                }}
+                className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary border border-primary rounded hover:bg-primary hover:text-white transition active:scale-95"
+              >
+                Logout
+              </button>
+            </>
+          )}
         </div>
       </div>
     </header>

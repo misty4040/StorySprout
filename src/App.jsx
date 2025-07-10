@@ -1,31 +1,41 @@
-
-import Header from "./components/Header";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home"; // you'll create this next
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
 import About from "./pages/About";
 import Explore from "./pages/Explore";
 import Gift from "./pages/Gift";
-import ContactUs from './pages/ContactUs';
-import Login from "./pages/LoginPage"; // you'll create this next
+import ContactUs from "./pages/ContactUs";
+import Login from "./pages/LoginPage";
 import SignUp from "./pages/SignUp";
-import Footer from "./components/Footer"; // you'll create this next
 import CreateStory from "./pages/CreateStory";
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  // 👇 Load user from localStorage on initial mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   return (
     <Router>
-      <Header />
+      <Header user={user} setUser={setUser} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About/>}></Route>
-        <Route path="/explore" element={<Explore />}></Route>
-        <Route path="/gift" element={<Gift />}></Route>
-        <Route path="/create-story" element={<CreateStory />}></Route>
-        <Route path="/contact" element={<ContactUs />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/signup" element={<SignUp />}></Route>
+        <Route path="/about" element={<About />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/gift" element={<Gift />} />
+        <Route path="/create-story" element={<CreateStory />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/signup" element={<SignUp setUser={setUser} />} />
       </Routes>
-      <Footer/>
+      <Footer />
     </Router>
   );
 }

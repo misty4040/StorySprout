@@ -1,33 +1,36 @@
+// src/components/GoogleLoginPage.jsx
 import React from "react";
-import { auth, provider } from "./Firebase";
 import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "./Firebase";
 import { useNavigate } from "react-router-dom";
 
-const GoogleLoginButton = () => {
+const GoogleLoginButton = ({ setUser }) => {
   const navigate = useNavigate();
 
-  const handleGoogleSignIn = async () => {
+  const handleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      localStorage.setItem("user", JSON.stringify(result.user));
-    //   alert(`Welcome, ${result.user.displayName}`);
+      const user = result.user;
+
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user); // ✅ this updates Header
       navigate("/");
-    } catch (error) {
-      console.error("Sign-in error:", error.message);
+    } catch (err) {
+      console.error("Google Login Failed:", err.message);
     }
   };
 
   return (
     <button
-      onClick={handleGoogleSignIn}
-      className="flex items-center justify-center gap-2 flex-1 border px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 active:scale-95"
+      onClick={handleLogin}
+      className="flex items-center justify-center gap-2 bg-gray-100 text-indigo-600 px-4 py-2 rounded hover:bg-gray-200 transition active:scale-95 w-full"
     >
       <img
-        src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-        alt="Google"
+        src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+        alt="Google icon"
         className="w-5 h-5"
       />
-      <span>Google</span>
+      Google
     </button>
   );
 };

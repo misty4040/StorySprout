@@ -1,7 +1,7 @@
 import React from "react";
 import GoogleLoginButton from "../components/GoogleLoginPage";
 
-export default function LoginPage() {
+export default function LoginPage({setUser}) {
   return (
     <section className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-12">
       <div className="container max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
@@ -73,7 +73,7 @@ export default function LoginPage() {
             <div className="mt-8 pt-6 border-t border-gray-200 text-center">
               <p className="text-gray-600 mb-4">Or continue with</p>
               <div className="flex gap-4">
-                <GoogleLoginButton />
+                <GoogleLoginButton setUser={setUser} />
               </div>
             </div>
 
