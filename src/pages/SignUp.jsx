@@ -1,7 +1,7 @@
 import React from "react";
 import loginIllustration from "../assets/images/login.png";
 import { Link } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
+import GoogleLoginButton from "../components/GoogleLoginPage"; // Adjust the path as needed
 
 const SignUp = () => {
   return (
@@ -120,10 +120,7 @@ const SignUp = () => {
               <div className="mt-6 pt-6 border-t text-center">
                 <p className="text-gray-600 text-sm mb-4">Or sign up with</p>
                 <div className="flex gap-3">
-                  <button className="flex items-center justify-center gap-2 flex-1 border px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 active:scale-95">
-                    <FcGoogle size={20}/> Google
-                  </button>
-                  
+                  <GoogleLoginButton />
                 </div>
               </div>
             </div>
