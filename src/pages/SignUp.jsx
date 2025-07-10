@@ -3,7 +3,7 @@ import loginIllustration from "../assets/images/login.png";
 import { Link } from "react-router-dom";
 import GoogleLoginButton from "../components/GoogleLoginPage"; // Adjust the path as needed
 
-const SignUp = () => {
+const SignUp = ({setUser}) => {
   return (
     <div>
       <section className="py-12 px-4">
@@ -120,7 +120,7 @@ const SignUp = () => {
               <div className="mt-6 pt-6 border-t text-center">
                 <p className="text-gray-600 text-sm mb-4">Or sign up with</p>
                 <div className="flex gap-3">
-                  <GoogleLoginButton />
+                  <GoogleLoginButton setUser={setUser} />
                 </div>
               </div>
             </div>
