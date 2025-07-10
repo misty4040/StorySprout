@@ -15,15 +15,7 @@ const Footer = () => {
             StorySprout
           </div>
           <p className="opacity-90 leading-relaxed">
-            123 Market St. #22B
-            <br />
-            Charlottesville, California
-            <br />
-            44635
-            <br />
-            (434) 546-4356
-            <br />
-            contact@storysprout.com
+            storysproutqueries@gmail.com
           </p>
         </div>
 
