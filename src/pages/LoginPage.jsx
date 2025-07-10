@@ -1,4 +1,5 @@
 import React from "react";
+import { FcGoogle } from "react-icons/fc";
 
 export default function LoginPage() {
   return (
@@ -63,7 +64,7 @@ export default function LoginPage() {
               </div>
               <button
                 type="submit"
-                className="w-full bg-purple-700 text-white py-2 rounded-lg font-semibold hover:bg-purple-800 transition duration-300"
+                className="w-full bg-purple-700 text-white py-2 rounded-lg font-semibold hover:bg-purple-800 transition duration-300 active:scale-95"
               >
                 Sign In
               </button>
@@ -72,11 +73,8 @@ export default function LoginPage() {
             <div className="mt-8 pt-6 border-t border-gray-200 text-center">
               <p className="text-gray-600 mb-4">Or continue with</p>
               <div className="flex gap-4">
-                <button className="flex-1 border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition">
-                  📧 Google
-                </button>
-                <button className="flex-1 border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition">
-                  👤 Facebook
+                <button className="flex items-center justify-center gap-1 flex-1 border border-gray-300 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition active:scale-95">
+                  <FcGoogle size={20} /> Google
                 </button>
               </div>
             </div>

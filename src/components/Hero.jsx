@@ -19,7 +19,7 @@ const Hero = () => {
           </p>
           <Link
             to="/create-story"
-            className="inline-block bg-gradient-to-r from-purple-500 to-purple-700 text-white text-lg font-semibold py-3 px-6 rounded-md hover:shadow-lg transition"
+            className="inline-block bg-gradient-to-r from-purple-500 to-purple-700 text-white text-lg font-semibold py-3 px-6 rounded-md hover:shadow-lg transition active:scale-95"
           >
             🪄 Start Creating Now
           </Link>
