@@ -106,14 +106,14 @@ export default function Header() {
           <Link
             to="/login"
             onClick={() => setIsMenuOpen(false)}
-            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary border border-primary rounded hover:bg-primary hover:text-white transition"
+            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary border border-primary rounded hover:bg-primary hover:text-white transition active:scale-95"
           >
             Login
           </Link>
           <Link
             to="/signup"
             onClick={() => setIsMenuOpen(false)}
-            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-primary rounded hover:bg-purple-700 transition"
+            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-primary rounded hover:bg-purple-700 transition active:scale-95"
           >
             Sign Up
           </Link>

@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import emailjs from "emailjs-com";
 import contactImage from "../assets/contact.png";
 
 const ContactUs = () => {
   const formRef = useRef();
-
-const ContactUs = () => {
   useEffect(() => {
     emailjs.init("v1JEDKkABCH7KSB_-"); // Your public key
   }, []);
