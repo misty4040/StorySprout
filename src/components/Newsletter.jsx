@@ -21,7 +21,7 @@ const Newsletter = () => {
           />
           <button
             type="submit"
-            className="bg-gradient-to-r from-purple-500 to-purple-700 text-white px-6 py-3 rounded-md font-semibold hover:shadow-lg transition"
+            className="bg-gradient-to-r from-purple-500 to-purple-700 text-white px-6 py-3 rounded-md font-semibold hover:shadow-lg transition active:scale-95"
           >
             Subscribe
           </button>

@@ -77,7 +77,7 @@ function Explore() {
         </p>
       </div>
 
-      <div className="grid md:grid-cols-[280px_1fr] gap-8">
+      <div className="grid lgm:grid-cols-[280px_1fr] gap-8">
         {/* Sidebar */}
         <aside className="space-y-6">
           <div className="bg-white shadow rounded-lg p-6">
@@ -158,14 +158,14 @@ function Explore() {
             {stories.map((story, index) => (
               <div
                 key={index}
-                className="bg-white shadow-md rounded-lg overflow-hidden transition-transform hover:-translate-y-1 hover:shadow-xl"
+                className="bg-white shadow-md rounded-lg overflow-hidden transition-transform hover:-translate-y-1 hover:shadow-xl h-full flex flex-col"
               >
                 <img
                   src={story.img}
                   alt={story.title}
                   className="w-full h-[200px] object-cover"
                 />
-                <div className="p-4">
+                <div className="p-4 flex flex-col flex-grow">
                   <div className="flex flex-wrap gap-2 mb-2">
                     {story.tags.map((tag, i) => (
                       <span
@@ -186,7 +186,8 @@ function Explore() {
                     <span>{story.age}</span>
                     <span>{story.rating}</span>
                   </div>
-                  <button className="mt-4 w-full bg-transparent border border-purple-600 text-purple-600 hover:bg-purple-100 font-medium py-2 rounded">
+                  <div className="grow"></div>
+                  <button className="mt-4 w-full bg-transparent border border-purple-600 text-purple-600 hover:bg-purple-100 font-medium py-2 rounded active:scale-95 transition">
                     Read Sample
                   </button>
                 </div>
@@ -206,7 +207,7 @@ function Explore() {
         </p>
         <a
           href="/create-story"
-          className="inline-block mt-6 px-6 py-3 bg-white text-purple-600 border border-purple-600 rounded-full font-semibold hover:bg-purple-100"
+          className="inline-block mt-6 px-6 py-3 bg-white text-purple-600 border border-purple-600 rounded-full font-semibold hover:bg-purple-100 active:scale-95"
         >
           Start Creating Now
         </a>
