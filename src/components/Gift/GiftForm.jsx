@@ -202,7 +202,7 @@ function GiftForm() {
             <div className="text-center">
               <button
                 type="submit"
-                className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+                className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition active:scale-95"
               >
                 🎁 Create Gift Story
               </button>

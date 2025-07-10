@@ -223,7 +223,7 @@ export default function CreateStory() {
             <div className="text-center">
               <button
                 type="submit"
-                className="btn btn-primary text-white px-6 py-3 rounded-md bg-purple-600 hover:bg-purple-700"
+                className="btn btn-primary text-white px-6 py-3 rounded-md bg-purple-600 hover:bg-purple-700 active:scale-95"
               >
                 ✨ Generate My Magical Story
               </button>
