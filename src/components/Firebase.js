@@ -1,7 +1,15 @@
+// src/components/Firebase.js
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 
+// ✅ Your Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyCznrJ9tXr58lwVemyN7hONVCuEDwmaKVs",
   authDomain: "storysprout-f8d5f.firebaseapp.com",
@@ -12,11 +20,28 @@ const firebaseConfig = {
   measurementId: "G-FD6KSXCWX7",
 };
 
+// ✅ Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-// ✅ These must be added
+// ✅ Auth and Providers
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-export { auth, provider };
+// 🔐 Google Sign-In
+function googleLogin() {
+  return signInWithPopup(auth, provider);
+}
+
+// ✉️ Email Signup with Verification (✅ Fixed)
+function emailSignup(email, password) {
+  return createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      return sendEmailVerification(user).then(() => {
+        return userCredential; // ✅ RETURN userCredential so you can access .user
+      });
+    });
+}
+
+export { auth, provider, googleLogin, emailSignup };
