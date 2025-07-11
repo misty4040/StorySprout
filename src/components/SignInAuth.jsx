@@ -1,31 +1,38 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loginIllustration from "../assets/images/login.png";
-import { emailSignup, googleLogin } from "../components/Firebase";
-import GoogleLoginButton from "../components/GoogleLoginPage";
+import { auth, googleLogin } from "../components/Firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
-const SignUp = ({ setUser }) => {
+const SignInAuth = ({ setUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleEmailSignup = async (e) => {
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
     try {
-      const userCredential = await emailSignup(email, password);
-      alert("Verification email sent! Please check your inbox.");
-      setUser(userCredential.user);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      if (user.emailVerified) {
+        setUser(user);
+        navigate("/"); // Redirect after login
+      } else {
+        alert("Please verify your email before logging in.");
+      }
     } catch (error) {
-      alert("Signup failed: " + error.message);
+      alert("Login failed: " + error.message);
       console.error(error);
     }
   };
 
-  const handleGoogleSignup = async () => {
+  const handleGoogleLogin = async () => {
     try {
       const userCredential = await googleLogin();
       setUser(userCredential.user);
+      navigate("/");
     } catch (error) {
-      alert("Google signup failed: " + error.message);
+      alert("Google login failed: " + error.message);
       console.error(error);
     }
   };
@@ -36,77 +43,70 @@ const SignUp = ({ setUser }) => {
         <div>
           <div className="max-w-md mx-auto bg-white p-8 rounded-xl shadow">
             <h1 className="text-3xl font-bold mb-2 text-center text-purple-700">
-              Join StorySprout
+              Welcome Back
             </h1>
             <p className="text-md text-gray-600 text-center mb-6">
-              Create an account and start making magical stories
+              Log in to continue creating magical stories
             </p>
-            <form className="space-y-6" onSubmit={handleEmailSignup}>
+            <form className="space-y-4" onSubmit={handleEmailLogin}>
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <label htmlFor="email" className="block text-md font-medium">
                   Email Address
                 </label>
                 <input
                   type="email"
                   id="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-purple-300"
+                  required
                 />
               </div>
               <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <label htmlFor="password" className="block text-md font-medium">
                   Password
                 </label>
                 <input
                   type="password"
                   id="password"
-                  name="password"
-                  placeholder="Enter your password"
-                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-purple-300"
+                  required
                 />
               </div>
               <button
                 type="submit"
                 className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700"
               >
-                Sign Up with Email
+                Sign In with Email
               </button>
             </form>
 
-            <div className="mt-8 pt-6 border-t border-gray-200 text-center">
-              <p className="text-gray-600 mb-4">Or continue with</p>
-              <div className="flex gap-4">
-                <GoogleLoginButton setUser={setUser} />
-              </div>
+            <div className="mt-6 pt-6 border-t text-center">
+              <p className="text-gray-600 text-sm mb-4">Or sign in with</p>
+              <button
+                onClick={handleGoogleLogin}
+                className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600"
+              >
+                Sign In with Google
+              </button>
             </div>
           </div>
           <p className="text-center text-sm mt-6 text-gray-600">
-            Already have an account?
+            Don't have an account?
             <Link
-              to="/login"
+              to="/signup"
               className="text-purple-600 hover:underline font-medium ml-1"
             >
-              Sign in here
+              Sign up here
             </Link>
           </p>
         </div>
         <div className="hidden md:block">
           <img
             src={loginIllustration}
-            alt="Sign Up Illustration"
+            alt="Login Illustration"
             className="w-full max-w-lg mx-auto"
           />
         </div>
@@ -115,4 +115,4 @@ const SignUp = ({ setUser }) => {
   );
 };
 
-export default SignUp;
+export default SignInAuth;
