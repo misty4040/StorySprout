@@ -1,24 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import loginIllustration from "../assets/images/login.png";
-import { emailSignup, googleLogin } from "../components/Firebase";
+import { googleLogin } from "../components/Firebase";
 import GoogleLoginButton from "../components/GoogleLoginPage";
 
 const SignUp = ({ setUser }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleEmailSignup = async (e) => {
-    e.preventDefault();
-    try {
-      const userCredential = await emailSignup(email, password);
-      alert("Verification email sent! Please check your inbox.");
-      setUser(userCredential.user);
-    } catch (error) {
-      alert("Signup failed: " + error.message);
-      console.error(error);
-    }
-  };
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
 
   const handleGoogleSignup = async () => {
     try {
@@ -41,7 +30,7 @@ const SignUp = ({ setUser }) => {
             <p className="text-md text-gray-600 text-center mb-6">
               Create an account and start making magical stories
             </p>
-            <form className="space-y-6" onSubmit={handleEmailSignup}>
+            <form className="space-y-6">
               <div>
                 <label
                   htmlFor="email"

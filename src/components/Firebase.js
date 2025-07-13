@@ -5,8 +5,6 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
 } from "firebase/auth";
 
 // ✅ Your Firebase config
@@ -33,15 +31,5 @@ function googleLogin() {
   return signInWithPopup(auth, provider);
 }
 
-// ✉️ Email Signup with Verification (✅ Fixed)
-function emailSignup(email, password) {
-  return createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      return sendEmailVerification(user).then(() => {
-        return userCredential; // ✅ RETURN userCredential so you can access .user
-      });
-    });
-}
 
-export { auth, provider, googleLogin, emailSignup };
+export { auth, provider, googleLogin };
