@@ -1,6 +1,34 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateStory() {
+  const navigate = useNavigate();
+
+  const nameRef = useRef();
+  const messageRef = useRef();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const form = new FormData(e.target);
+
+    const name = form.get("childName") || "Little One";
+    const message = form.get("message") || "";
+    const characters =
+      form.getAll("characters").join(", ") || "magical friends";
+    const themes = form.getAll("themes");
+    const theme = themes[0]?.toLowerCase() || "adventure"; // just use one
+
+    const query = new URLSearchParams({
+      name,
+      characters,
+      theme,
+      message,
+    }).toString();
+
+    navigate(`/story-result?${query}`);
+  };
+
   return (
     <section className="py-16 bg-gradient-to-br from-purple-100 to-purple-200">
       <div className="container mx-auto px-4">
@@ -14,7 +42,7 @@ export default function CreateStory() {
         </div>
 
         <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
-          <form className="space-y-12">
+          <form className="space-y-12" onSubmit={handleSubmit}>
             {/* Child Info */}
             <div>
               <h2 className="text-xl font-semibold text-purple-600 mb-6">
@@ -27,6 +55,8 @@ export default function CreateStory() {
                   </label>
                   <input
                     type="text"
+                    name="childName"
+                    ref={nameRef}
                     placeholder="Enter child's name"
                     className="w-full mt-2 px-4 py-2 border rounded-md"
                     required
@@ -214,6 +244,8 @@ export default function CreateStory() {
                 Add a special message or dedication
               </label>
               <textarea
+                name="message"
+                ref={messageRef}
                 className="w-full h-28 px-4 py-2 border rounded-md"
                 placeholder="Example: 'Happy Birthday! Hope this adventure makes you smile!'"
               ></textarea>
