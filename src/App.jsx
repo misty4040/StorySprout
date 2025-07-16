@@ -10,6 +10,7 @@ import ContactUs from "./pages/ContactUs";
 import Login from "./pages/LoginPage";
 import SignUp from "./pages/SignUp";
 import CreateStory from "./pages/CreateStory";
+import StoryResult from "./pages/StoryResult";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -31,6 +32,7 @@ function App() {
         <Route path="/explore" element={<Explore />} />
         <Route path="/gift" element={<Gift />} />
         <Route path="/create-story" element={<CreateStory />} />
+        <Route path="/story-result" element={<StoryResult />}></Route>
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/signup" element={<SignUp setUser={setUser} />} />
