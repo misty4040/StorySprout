@@ -12,7 +12,8 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4002;
 const DB_URI = process.env.MONGODB_URI;
-
+app.use(express.json());
+app.use(cors());
 // === 🔥 GLOBAL ERROR LOGGING ===
 process.on("uncaughtException", (err) => {
   console.error("💥 Uncaught Exception:", err);
@@ -24,7 +25,6 @@ process.on("unhandledRejection", (reason, promise) => {
 
 // === 🔧 Middleware ===
 // app.use(cors());
-app.use(express.json());
 
 // === 🛣 Routes ===
 app.use("/api/story", storyRoutes);
