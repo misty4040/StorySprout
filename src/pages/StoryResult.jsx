@@ -11,44 +11,59 @@ import PersonalMessage from "../components/PersonalMessage";
 
 const StoryResult = () => {
   const [searchParams] = useSearchParams();
-  const [story, setStory] = useState("");
+  const [story, setStory] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Get query params from URL
   const childName = searchParams.get("name") || "Little One";
-  const characters = searchParams.get("characters") || "magical friends";
-  const theme = searchParams.get("theme") || "adventure";
+  const age = searchParams.get("age") || "6";
+  const gender = searchParams.get("gender") || "Other";
+  const characters = searchParams.get("characters")?.split(",") || ["magical friend"];
+  const setting = searchParams.get("setting") || "Space Island";
+  const theme = searchParams.get("theme") || "Curiosity and Friendship";
   const personalMessage = searchParams.get("message") || "";
 
   useEffect(() => {
-    const generateStory = () => {
-      const themes = {
-        adventure: `Once upon a time, ${childName} discovered a hidden map in their grandmother's attic. The map showed the way to the Crystal Caves, where ${characters} were waiting for a brave explorer. With courage in their heart, ${childName} packed a small bag and set off on the greatest adventure of their life.
+    const generateStoryFromAPI = async () => {
+      try {
+        const res = await fetch("http://localhost:8081/api/story/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            childName,
+            age: parseInt(age),
+            gender,
+            characters,
+            customCharacter: "Captain Zoom",
+            setting,
+            customSetting: "Crystal Galaxy",
+            theme,
+            customTheme: "Courage",
+            personalMessage,
+            storyText:
+              "Once upon a time, Lucas and his friends Neko and Juno set off on a thrilling quest across a floating space island filled with singing stars and glowing meteor gardens. Their bravery and teamwork helped restore light to the galaxy.",
+            coverImageUrl: "https://example.com/cover-lucas.png",
+            createdBy: "Ishika Gupta",
+          }),
+        });
 
-Through enchanted forests and across sparkling rivers, ${childName} met each of the ${characters} who became their loyal companions. Together, they solved riddles, helped forest creatures, and learned that the real treasure wasn't gold or jewels, but the friendships they made along the way.
+        if (!res.ok) throw new Error("Failed to generate story");
 
-When ${childName} finally returned home, they carried with them not just memories of their incredible journey, but the knowledge that they were braver and kinder than they ever imagined. And every night before bed, ${childName} would look at the stars and know that more adventures were waiting, whenever they were ready.`,
-
-        friendship: `In a cozy little town, ${childName} felt lonely until they discovered a secret garden where ${characters} lived. These weren't ordinary friends - they had the magical ability to understand every child's heart and make them feel truly special.
-
-At first, ${childName} was shy, but the ${characters} welcomed them with warm smiles and open hearts. Together, they played games that sparkled with laughter, shared secrets under the old oak tree, and learned that friendship is the most powerful magic of all.
-
-Day by day, ${childName} grew more confident, knowing they had friends who would always be there. And when other children in town felt lonely, ${childName} and the ${characters} welcomed them into their magical circle, spreading joy and friendship wherever they went.`,
-
-        magic: `${childName} always believed in magic, and one starry night, that belief came true. A gentle voice whispered through their bedroom window, calling them to join the ${characters} in the Realm of Wonder, where anything was possible.
-
-With a sprinkle of stardust, ${childName} was transported to a world where trees sang lullabies, flowers painted rainbows in the sky, and the ${characters} taught them to speak the language of magic. ${childName} learned to make flowers bloom with a smile and turn rain into butterfly kisses.
-
-But the greatest magic ${childName} discovered was the magic within themselves - the power to spread joy, show kindness, and make the world a little brighter just by being who they are. When it was time to return home, ${childName} kept that magic in their heart forever.`,
-      };
-
-      const selectedStory = themes[theme] || themes.adventure;
-      setStory(selectedStory);
-      setIsLoading(false);
+        const data = await res.json();
+        console.log("✅ Story received from backend:", data);
+        setStory(data.storyText);
+      } catch (error) {
+        console.error("❌ Error fetching story:", error.message);
+        setStory("Oops! We couldn't generate your story. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    const timer = setTimeout(generateStory, 1500);
-    return () => clearTimeout(timer);
-  }, [childName, characters, theme]);
+    generateStoryFromAPI();
+  }, [childName, age, gender, characters, setting, theme, personalMessage]);
 
   const handleDownload = () => {
     GeneratePDF({ childName, story, personalMessage });
