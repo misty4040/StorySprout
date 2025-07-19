@@ -9,15 +9,27 @@ export const createStory = async (req, res) => {
       characters,
       setting,
       theme,
-      tone,
-      targetAge,
-      language,
-      childName,  // ✅ Added
-      age,        // ✅ Added
-      gender      // ✅ Added
+      childName,  
+      age,        
+      gender,      
+      customCharacter,
+      customSetting,
+      customTheme,
     } = req.body;
 
-    const prompt = `Write a ${tone?.toLowerCase()} story in ${language} for a ${targetAge}-year-old. Title: "${title}". Characters: ${characters?.join(", ")}. Setting: ${setting}. Theme: ${theme}. The story should be engaging and imaginative.`;
+    const finalCharacters = [...characters];
+    if (customCharacter) finalCharacters.push(customCharacter);
+
+    const finalSetting =
+    customSetting && customSetting.trim().length > 0
+    ? customSetting.trim()
+    : setting;
+
+    let finalTheme = theme;
+    if (customTheme?.trim()) {
+      finalTheme = theme ? `${theme}, ${customTheme}` : customTheme;
+    }
+    const prompt = `Write a engaging story in English for a ${age}-year-old. Title: "${title}". Characters: ${finalCharacters?.join(", ")}. Setting: ${finalSetting}. Theme: ${finalTheme}. The story should be fun and imaginative.`;
 
     console.log("📨 Prompt being sent to Cohere:", prompt);
 
@@ -27,12 +39,9 @@ export const createStory = async (req, res) => {
 
     const story = new Story({
       title,
-      characters,
-      setting,
-      theme,
-      tone,
-      targetAge,
-      language,
+      characters : finalCharacters,
+      setting : finalSetting,
+      theme : finalTheme,
       storyText,
       childName,  // ✅ Now included
       age,        // ✅ Now included
@@ -42,7 +51,10 @@ export const createStory = async (req, res) => {
     const savedStory = await story.save();
     console.log("✅ Story saved to MongoDB");
 
-    res.status(201).json(savedStory);
+    res.status(201).json({
+      message: "Story created successfully",
+      storyText: savedStory.storyText,
+    });
   } catch (error) {
     console.error("❌ Error generating story:", error);  // logs full error
     res.status(500).json({ error: "Failed to generate story." });
