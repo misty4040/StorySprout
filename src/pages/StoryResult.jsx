@@ -1,4 +1,3 @@
-// StoryResult.jsx
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Download, ArrowLeft } from "lucide-react";
@@ -14,25 +13,27 @@ const StoryResult = () => {
   const [story, setStory] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const hasFetched = useRef(false);
-  // ✅ UseMemo to stabilize values
+
+  // ✅ Stable query values
   const query = useMemo(() => {
-    console.log(searchParams);
     return {
       childName: searchParams.get("name") || "Little One",
       age: parseInt(searchParams.get("age") || "6"),
       gender: searchParams.get("gender") || "Other",
       characters: (searchParams.get("characters") || "magical friend").split(","),
-      setting: searchParams.get("setting") || "Space Island",
+      setting: searchParams.get("setting") || "",
+      customSetting: searchParams.get("customSetting") || "",
       theme: searchParams.get("theme") || "Curiosity and Friendship",
       personalMessage: searchParams.get("message") || "",
+      title: searchParams.get("title") || "A Magical Adventure",
+      customTheme: searchParams.get("customTheme") || "",
+      customCharacter: searchParams.get("customCharacter") || "",
     };
-
-
   }, [searchParams]);
+
+  // ✅ API call
   const generateStoryFromAPI = async () => {
     try {
-      console.log("This is testing code ");
-
       const res = await fetch("http://localhost:8081/api/story/create", {
         method: "POST",
         headers: {
@@ -43,14 +44,13 @@ const StoryResult = () => {
           age: query.age,
           gender: query.gender,
           characters: query.characters,
-          customCharacter: "Captain Zoom",
+          customCharacter: query.customCharacter,
           setting: query.setting,
-          customSetting: "Crystal Galaxy",
+          customSetting: query.customSetting,
           theme: query.theme,
-          customTheme: "Courage",
+          customTheme: query.customTheme,
           personalMessage: query.personalMessage,
-          storyText:
-            "Once upon a time, Lucas and his friends Neko and Juno set off on a thrilling quest across a floating space island filled with singing stars and glowing meteor gardens. Their bravery and teamwork helped restore light to the galaxy.",
+          title: query.title,
           coverImageUrl: "https://example.com/cover-lucas.png",
           createdBy: "Ishika Gupta",
         }),
@@ -60,7 +60,7 @@ const StoryResult = () => {
 
       const data = await res.json();
       setStory(data.storyText);
-      console.log("✅ Story received:", data);
+      console.log("✅ Story received:", data.storyText);
     } catch (error) {
       console.error("❌ Error fetching story:", error.message);
       setStory("Oops! We couldn't generate your story. Please try again.");
@@ -70,11 +70,11 @@ const StoryResult = () => {
   };
 
   useEffect(() => {
-
     if (hasFetched.current) return;
     hasFetched.current = true;
     generateStoryFromAPI();
-
+    // only on mount
+    // eslint-disable-next-line
   }, []);
 
   const handleDownload = () => {
