@@ -8,6 +8,7 @@ import StoryHeader from "../components/StoryHeader";
 import StoryContent from "../components/StoryContent";
 import PersonalMessage from "../components/PersonalMessage";
 
+
 const StoryResult = () => {
   const [searchParams] = useSearchParams();
   const [story, setStory] = useState(null);
