@@ -1,21 +1,62 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loginIllustration from "../assets/images/login.png";
 import { googleLogin } from "../components/Firebase";
 import GoogleLoginButton from "../components/GoogleLoginPage";
 
-const SignUp = ({ setUser }) => {
+const API_BASE = "http://localhost:8081"; // Change if backend is hosted
 
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
+const SignUp = ({ setUser }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/auth/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || "Signup failed");
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      setUser(data.user);
+      navigate("/"); // Redirect after signup
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGoogleSignup = async () => {
     try {
-      const userCredential = await googleLogin();
-      setUser(userCredential.user);
+      const userCredential = await googleLogin(); // from Firebase
+      const idToken = await userCredential.user.getIdToken();
+
+      const res = await fetch(`${API_BASE}/api/auth/google`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || "Google signup failed");
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      setUser(data.user);
+      navigate("/");
     } catch (error) {
       alert("Google signup failed: " + error.message);
-      console.error(error);
     }
   };
 
@@ -30,7 +71,24 @@ const [password, setPassword] = useState("");
             <p className="text-md text-gray-600 text-center mb-6">
               Create an account and start making magical stories
             </p>
-            <form className="space-y-6">
+            <form onSubmit={handleSignup} className="space-y-6">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="Enter your name"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
               <div>
                 <label
                   htmlFor="email"
@@ -41,7 +99,6 @@ const [password, setPassword] = useState("");
                 <input
                   type="email"
                   id="email"
-                  name="email"
                   placeholder="Enter your email"
                   required
                   value={email}
@@ -59,7 +116,6 @@ const [password, setPassword] = useState("");
                 <input
                   type="password"
                   id="password"
-                  name="password"
                   placeholder="Enter your password"
                   required
                   value={password}
@@ -69,16 +125,17 @@ const [password, setPassword] = useState("");
               </div>
               <button
                 type="submit"
-                className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700"
+                disabled={loading}
+                className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 disabled:opacity-50"
               >
-                Sign Up with Email
+                {loading ? "Signing Up..." : "Sign Up with Email"}
               </button>
             </form>
 
             <div className="mt-8 pt-6 border-t border-gray-200 text-center">
               <p className="text-gray-600 mb-4">Or continue with</p>
-              <div className="flex gap-4">
-                <GoogleLoginButton setUser={setUser} />
+              <div className="flex gap-4 justify-center">
+                <GoogleLoginButton onClick={handleGoogleSignup} />
               </div>
             </div>
           </div>

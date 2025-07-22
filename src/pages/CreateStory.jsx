@@ -12,25 +12,41 @@ export default function CreateStory() {
 
     const name = form.get("childName") || "Little One";
     const message = form.get("message") || "";
-    const characters = form.getAll("characters").join(", ") || "magical friends";
-    const customCharacter = form.get("customCharacter") || ""; // ✅ NEW
-    const themes = form.getAll("themes");
-    const theme = themes[0]?.toLowerCase() || "adventure";
     const age = form.get("age") || "6";
-    const gender = form.get("gender") || "other";
-    const setting = form.get("setting") || "space";
-    const title = `The ${theme} of ${name}`;
-    const customSetting = form.get("customSetting") || "";
+    const gender = form.get("gender") || "Other";
+
+    // Characters
+    let characters = form.getAll("characters");
+    const customCharacter = form.get("customCharacter")?.trim();
+    if (customCharacter) characters.push(customCharacter);
+    if (characters.length === 0) characters = ["magical friend"];
+
+    // Settings
+    const setting = form.get("setting");
+    const customSetting = form.get("customSetting")?.trim();
+    const finalSetting = customSetting || setting || "space";
+
+    // Themes
+    const themes = form.getAll("themes");
+    const customTheme = form.get("customTheme")?.trim();
+    let finalTheme = themes[0]?.toLowerCase() || "";
+    if (customTheme) {
+      finalTheme = finalTheme ? `${finalTheme}, ${customTheme}` : customTheme;
+    }
+    if (!finalTheme) finalTheme = "Adventure";
+
+    const title = `The ${finalTheme} of ${name}`;
 
     const query = new URLSearchParams({
       name,
       age,
       gender,
-      characters,
-      customCharacter, 
-      setting,
+      characters: characters.join(", "),
+      customCharacter,
+      setting: finalSetting,
       customSetting,
-      theme,
+      theme: finalTheme,
+      customTheme,
       message,
       title,
     }).toString();
@@ -76,7 +92,6 @@ export default function CreateStory() {
                   <select
                     name="age"
                     className="w-full mt-2 px-4 py-2 border rounded-md"
-                    required
                   >
                     <option value="">Select age</option>
                     {[...Array(8)].map((_, i) => (
@@ -92,8 +107,7 @@ export default function CreateStory() {
                 <div className="flex gap-4 mt-2">
                   {["Boy", "Girl", "Other"].map((g) => (
                     <label key={g} className="flex items-center gap-2">
-                      <input type="radio" name="gender" value={g} required />{" "}
-                      {g}
+                      <input type="radio" name="gender" value={g} /> {g}
                     </label>
                   ))}
                 </div>
@@ -162,7 +176,6 @@ export default function CreateStory() {
                 ))}
               </div>
 
-              {/* ✅ Custom Character Input */}
               <div className="mt-6">
                 <label className="block text-md font-medium text-gray-700 mb-2">
                   ✏️ Or Add Your Own Main Character (Optional)
@@ -214,7 +227,6 @@ export default function CreateStory() {
                       name="setting"
                       value={val}
                       className="hidden peer"
-                      required
                     />
                     <div className="p-4 border-2 rounded-lg text-center peer-checked:border-purple-500 bg-white hover:shadow-md transition">
                       <div className="text-4xl mb-2">{icon}</div>
@@ -226,7 +238,7 @@ export default function CreateStory() {
                   </label>
                 ))}
               </div>
-            {/* ✅ Custom Setting Input */}
+
               <div className="mt-6">
                 <label className="block text-md font-medium text-gray-700 mb-2">
                   ✏️ Or Add Your Own Setting (Optional)
@@ -272,7 +284,6 @@ export default function CreateStory() {
                   </label>
                 ))}
               </div>
-              {/* ✅ Custom Theme Input */}
               <div className="mt-6">
                 <label className="block text-md font-medium text-gray-700 mb-2">
                   ✏️ Or Add Your Own Theme (Optional)
