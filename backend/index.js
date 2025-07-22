@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import { createRequire } from "module"; // To load JSON files safely
 import storyRoutes from "./routes/story.routes.js";
 import authRoutes from "./routes/authroutes.js";
 
@@ -12,8 +11,6 @@ import authRoutes from "./routes/authroutes.js";
 dotenv.config();
 
 // Load serviceAccountKey.json safely
-const require = createRequire(import.meta.url);
-const serviceAccount = require("./serviceAccountKey.json");
 
 const app = express();
 const PORT = process.env.PORT || 8081;
@@ -31,7 +28,7 @@ app.use((req, res, next) => {
 
 // === Routes ===
 app.use("/api/auth", authRoutes); // All auth logic is in authroutes.js
-app.use("/api/story", authMiddleware, storyRoutes); // Protect story routes
+app.use("/api/story", storyRoutes); // Protect story routes
 
 // === Connect to MongoDB ===
 mongoose
@@ -43,21 +40,7 @@ mongoose
   });
 
 // === Protected Middleware ===
-function authMiddleware(req, res, next) {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return res.status(401).json({ error: "Unauthorized" });
-
-  try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || "supersecretkey"
-    );
-    req.user = decoded;
-    next();
-  } catch (error) {
-    return res.status(401).json({ error: "Invalid or expired token" });
-  }
-}
+// Old inline middleware (REMOVE THIS PART)
 
 // === Root Route ===
 app.get("/", (req, res) => {
