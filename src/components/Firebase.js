@@ -1,13 +1,8 @@
-// src/components/Firebase.js
+// src/firebaseConfig.js
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
-// ✅ Your Firebase config
+// 🔧 Your Firebase project config
 const firebaseConfig = {
   apiKey: "AIzaSyCznrJ9tXr58lwVemyN7hONVCuEDwmaKVs",
   authDomain: "storysprout-f8d5f.firebaseapp.com",
@@ -18,18 +13,22 @@ const firebaseConfig = {
   measurementId: "G-FD6KSXCWX7",
 };
 
-// ✅ Initialize Firebase
+// 🔌 Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-// ✅ Auth and Providers
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// 🔐 Google Sign-In
-function googleLogin() {
-  return signInWithPopup(auth, provider);
-}
+// ✅ Reusable Google login function
+const googleLogin = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const idToken = await result.user.getIdToken();
+    return { idToken, user: result.user };
+  } catch (error) {
+    console.error("Google login failed:", error);
+    throw error;
+  }
+};
 
-
+// 🧠 Export everything
 export { auth, provider, googleLogin };
