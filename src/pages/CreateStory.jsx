@@ -3,27 +3,52 @@ import { useNavigate } from "react-router-dom";
 
 export default function CreateStory() {
   const navigate = useNavigate();
-
   const nameRef = useRef();
   const messageRef = useRef();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const form = new FormData(e.target);
 
     const name = form.get("childName") || "Little One";
     const message = form.get("message") || "";
-    const characters =
-      form.getAll("characters").join(", ") || "magical friends";
+    const age = form.get("age") || "6";
+    const gender = form.get("gender") || "Other";
+
+    // Characters
+    let characters = form.getAll("characters");
+    const customCharacter = form.get("customCharacter")?.trim();
+    if (customCharacter) characters.push(customCharacter);
+    if (characters.length === 0) characters = ["magical friend"];
+
+    // Settings
+    const setting = form.get("setting");
+    const customSetting = form.get("customSetting")?.trim();
+    const finalSetting = customSetting || setting || "space";
+
+    // Themes
     const themes = form.getAll("themes");
-    const theme = themes[0]?.toLowerCase() || "adventure"; // just use one
+    const customTheme = form.get("customTheme")?.trim();
+    let finalTheme = themes[0]?.toLowerCase() || "";
+    if (customTheme) {
+      finalTheme = finalTheme ? `${finalTheme}, ${customTheme}` : customTheme;
+    }
+    if (!finalTheme) finalTheme = "Adventure";
+
+    const title = `The ${finalTheme} of ${name}`;
 
     const query = new URLSearchParams({
       name,
-      characters,
-      theme,
+      age,
+      gender,
+      characters: characters.join(", "),
+      customCharacter,
+      setting: finalSetting,
+      customSetting,
+      theme: finalTheme,
+      customTheme,
       message,
+      title,
     }).toString();
 
     navigate(`/story-result?${query}`);
@@ -65,8 +90,8 @@ export default function CreateStory() {
                 <div>
                   <label className="block text-sm font-medium">Age</label>
                   <select
+                    name="age"
                     className="w-full mt-2 px-4 py-2 border rounded-md"
-                    required
                   >
                     <option value="">Select age</option>
                     {[...Array(8)].map((_, i) => (
@@ -80,10 +105,9 @@ export default function CreateStory() {
               <div className="mt-4">
                 <label className="block text-sm font-medium">Gender</label>
                 <div className="flex gap-4 mt-2">
-                  {["boy", "girl", "other"].map((g) => (
+                  {["Boy", "Girl", "Other"].map((g) => (
                     <label key={g} className="flex items-center gap-2">
-                      <input type="radio" name="gender" value={g} required />{" "}
-                      {g.charAt(0).toUpperCase() + g.slice(1)}
+                      <input type="radio" name="gender" value={g} /> {g}
                     </label>
                   ))}
                 </div>
@@ -128,9 +152,9 @@ export default function CreateStory() {
                     val: "owl",
                   },
                   {
-                    icon: "✏️",
-                    label: "Custom Character",
-                    desc: "Create your own Main Character",
+                    icon: "🐇",
+                    label: "Brave Rabbit",
+                    desc: "A quick and clever hero",
                     val: "rabbit",
                   },
                 ].map(({ icon, label, desc, val }) => (
@@ -150,6 +174,18 @@ export default function CreateStory() {
                     </div>
                   </label>
                 ))}
+              </div>
+
+              <div className="mt-6">
+                <label className="block text-md font-medium text-gray-700 mb-2">
+                  ✏️ Or Add Your Own Main Character (Optional)
+                </label>
+                <input
+                  type="text"
+                  name="customCharacter"
+                  placeholder="e.g. Captain Zoom, Shadow Cat, etc."
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                />
               </div>
             </div>
 
@@ -179,9 +215,9 @@ export default function CreateStory() {
                     val: "ocean",
                   },
                   {
-                    icon: "✏️",
-                    label: "Custom Setting",
-                    desc: "Create your own Magical Place",
+                    icon: "🌌",
+                    label: "Outer Space",
+                    desc: "A thrilling journey among stars and planets",
                     val: "space",
                   },
                 ].map(({ icon, label, desc, val }) => (
@@ -191,7 +227,6 @@ export default function CreateStory() {
                       name="setting"
                       value={val}
                       className="hidden peer"
-                      required
                     />
                     <div className="p-4 border-2 rounded-lg text-center peer-checked:border-purple-500 bg-white hover:shadow-md transition">
                       <div className="text-4xl mb-2">{icon}</div>
@@ -202,6 +237,18 @@ export default function CreateStory() {
                     </div>
                   </label>
                 ))}
+              </div>
+
+              <div className="mt-6">
+                <label className="block text-md font-medium text-gray-700 mb-2">
+                  ✏️ Or Add Your Own Setting (Optional)
+                </label>
+                <input
+                  type="text"
+                  name="customSetting"
+                  placeholder="e.g. Sunny Islands, Frozen Mountains, etc."
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                />
               </div>
             </div>
 
@@ -218,7 +265,10 @@ export default function CreateStory() {
                   ["🦁", "Courage"],
                   ["🎨", "Creativity"],
                   ["📚", "Learning"],
-                  ["✏️", "Custom theme"],
+                  ["🛡️", "Bravery"],
+                  ["🧩", "Problem Solving"],
+                  ["⚖️", "Justice"],
+                  ["🧠", "Curiosity"],
                 ].map(([icon, label]) => (
                   <label key={label} className="cursor-pointer">
                     <input
@@ -232,6 +282,17 @@ export default function CreateStory() {
                     </span>
                   </label>
                 ))}
+              </div>
+              <div className="mt-6">
+                <label className="block text-md font-medium text-gray-700 mb-2">
+                  ✏️ Or Add Your Own Theme (Optional)
+                </label>
+                <input
+                  type="text"
+                  name="customTheme"
+                  placeholder="e.g. Empathy, Wisdom, etc."
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                />
               </div>
             </div>
 
