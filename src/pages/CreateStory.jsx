@@ -252,6 +252,7 @@ export default function CreateStory() {
               </div>
             </div>
 
+
             {/* Themes */}
             <div>
               <h2 className="text-xl font-semibold text-purple-600 mb-6">
@@ -295,6 +296,7 @@ export default function CreateStory() {
                 />
               </div>
             </div>
+          
 
             {/* Personal Message */}
             <div>
