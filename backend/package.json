@@ -22,6 +22,7 @@
     "call-bind-apply-helpers": "^1.0.2",
     "call-bound": "^1.0.4",
     "chokidar": "^3.6.0",
+    "cohere-ai": "^7.17.1",
     "concat-map": "^0.0.1",
     "content-disposition": "^1.0.0",
     "content-type": "^1.0.5",
