@@ -151,7 +151,11 @@ function GiftForm() {
                     "Space",
                     "Art",
                     "Sports",
-                    "Custom",
+                    "Superpowers",
+                    "Music",
+                    "Cars",
+                    "Fairies",
+                    "Dance",
                   ].map((interest) => (
                     <label key={interest} className="cursor-pointer">
                       <input
@@ -197,7 +201,8 @@ function GiftForm() {
                     <option value="">Select relationship</option>
                     <option value="parent">Parent</option>
                     <option value="grandparent">Grandparent</option>
-                    <option value="aunt-uncle">Aunt/Uncle</option>
+                    <option value="aunt">Aunt</option>
+                    <option value="uncle">Uncle</option>
                     <option value="sibling">Sibling</option>
                     <option value="friend">Family Friend</option>
                     <option value="other">Other</option>
@@ -293,9 +298,6 @@ function GiftForm() {
               >
                 🎁 Create Gift Story
               </button>
-              <p className="text-sm text-slate-500 mt-2">
-                Your gift story will be ready within 24 hours!
-              </p>
             </div>
           </form>
         </div>
