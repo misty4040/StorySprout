@@ -37,6 +37,7 @@ const ContactUs = () => {
             id="contact-form"
             onSubmit={handleSubmit}
             className="space-y-5 text-sm"
+            ref={formRef}
           >
             <div>
               <label
